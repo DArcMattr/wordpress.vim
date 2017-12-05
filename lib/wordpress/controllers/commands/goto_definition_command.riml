@@ -100,7 +100,6 @@ class GotoDefinitionCommand < WordPressProjectCommand
   end
 
   defm to_display_word(word)
-    builder = self.lookup('ctags_command_builder')
     display_word = word
     display_word = self.strip_prefix(display_word, builder.get_action_uid())
     display_word = self.strip_prefix(display_word, builder.get_action_listener_uid())

@@ -76,19 +76,10 @@ class WpHookCommand < WordPressProjectCommand
     return 'action'
   end
 
-  " Note: must not conflict with other kinds or
-  " ctags gets confused
-  defm get_kind_uid(kind)
-    ctags_command_builder = self.lookup('ctags_command_builder')
-    return ctags_command_builder.to_leet(kind)
-  end
-
   " could be improved by taking cursor into account
   " but it's just 1 argument and I'm too lazy
   defm complete(word, cmd_line, cursor)
     bang     = self.cmd_line_has_bang(cmd_line)
-    kind     = self.get_ctag_kind(bang)
-    uid      = self.get_kind_uid(kind)
     hooks    = self.get_hooks_for(uid)
     filtered = self.filter_hooks(hooks, word)
 
@@ -106,7 +97,6 @@ class WpHookCommand < WordPressProjectCommand
 
     bang       = has_key(opts, 'bang') && opts.bang
     kind       = self.get_ctag_kind(bang)
-    uid        = self.get_kind_uid(kind)
     definition = self.add_uid_prefix(param, uid)
 
     self.process('Wdef', definition)

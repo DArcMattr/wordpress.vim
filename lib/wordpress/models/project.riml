@@ -11,9 +11,7 @@ riml_include 'command_registry'
 riml_include 'wpcli_command_factory'
 riml_include 'post'
 riml_include 'post_saver'
-riml_include 'ctags_builder'
 riml_include 'leet_convertor'
-riml_include 'ctags_command_builder'
 
 class Project
   def initialize
@@ -39,8 +37,6 @@ class Project
     self.container.register('post', 'Post', true)
     self.container.register('post_saver', 'PostSaver', false)
     self.container.register('leet_convertor', 'LeetConvertor', true)
-    self.container.register('ctags_builder', 'CTagsBuilder', true)
-    self.container.register('ctags_command_builder', 'CTagsCommandBuilder', true)
   end
 
   defm lookup(key)
@@ -51,7 +47,6 @@ class Project
     self.root = root
     self.load_wpcli(root)
     self.load_wordpress_path(root)
-    self.load_ctags_builder(root)
 
     if self.has_cli()
       self.commands = self.get_wpcli_commands()
@@ -127,13 +122,6 @@ class Project
   defm load_wordpress_path(root)
     wordpress_path = self.lookup('wordpress_path')
     self.wordpress_project_path = wordpress_path.get_path(root)
-  end
-
-  defm load_ctags_builder(root)
-    if self.has_wordpress_path()
-      ctags_builder = self.lookup('ctags_builder')
-      ctags_builder.set_project_path(self.get_wordpress_path())
-    end
   end
 
   defm get_wpcli
